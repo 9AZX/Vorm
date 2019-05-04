@@ -14,7 +14,7 @@ class Game:
         self.keys = [0,0,0,0,0]
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
-        self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
+        self.menuFont = pygame.font.Font("assets/font/wayner.ttf", 40)
         self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
                         Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
                         Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
@@ -64,7 +64,7 @@ class Game:
             sys.exit(0)
 
     def optionHandler(self):
-        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
+        self.menuFont = pygame.font.Font("assets/font/ka1.ttf", 40)
         optionMenuFont = pygame.font.init()
         option = Option("VOLUME : " + str(self.volume), (440, 525), self.menuFont, self.gameDisplay)
         while True:
@@ -124,7 +124,7 @@ class Game:
             heat -= 1 + 0
             heat = max(1, min(heat, 100))
             self.gameDisplay.blit(GEO[5], (0,0))
-            bigText = pygame.font.Font("assets/ka1.ttf", 80)
+            bigText = pygame.font.Font("assets/font/ka1.ttf", 80)
             title_text = bigText.render("SCORE: " + str(SCORE), True, ORANGE)
             self.gameDisplay.blit(title_text, (380, 280))
             self.gameDisplay.blit(GEO[0], (20, 30))
