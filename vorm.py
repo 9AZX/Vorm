@@ -144,6 +144,8 @@ def handlerEvent(game):
 
 def vormGame():
     pygame.init()
+    pygame.display.set_caption('Vorm')
+    pygame.display.set_icon(pygame.image.load('./assets/icon.png'))
     game = Game()
     while not game.getExit():
         handlerEvent(game)
