@@ -18,8 +18,9 @@ class Game:
         self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
                         Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
                         Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
-        self.volume = 50
-        # self.music = pygame.mixer.music.load("")
+        self.volume = 100
+        pygame.mixer.music.load("assets/music/intro.ogg")
+        pygame.mixer.music.play()
 
     def getExit(self):
         return self._exit
@@ -68,12 +69,12 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return 1
-                if event.key == pygame.K_UP:
-                    self.volume += 5
-                    # self.music.set_volume(self.volume)
-                elif event.key == pygame.K_DOWN:
-                    self.volume -= 5
-                    # self.music.set_volume(self.volume)
+                if event.key == pygame.K_m and self.volume == 100:
+                    self.volume = 0
+                    pygame.mixer.music.set_volume(self.volume)
+                else:
+                    self.volume = 100
+                    pygame.mixer.music.set_volume(self.volume)
 
     def getKeys(self):
         self.keys[0] = random.randint(0, 3)
