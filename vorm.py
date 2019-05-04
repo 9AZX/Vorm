@@ -29,19 +29,18 @@ class Game:
     def handlerMenu(self):
         self.setBackground(0, 0)
         pygame.event.pump()
-        self.gameHandler()
-        # for option in self.options:
-        #     if option.rect.collidepoint(pygame.mouse.get_pos()):
-        #         option.is_hovered = True
-        #     else:
-        #         option.is_hovered = False
-        #     option.draw(self.gameDisplay, self.menuFont)
-        # if (pygame.mouse.get_pressed()[0] and options[0].rect.collidepoint(pygame.mouse.get_pos())):
-        #     game_ft()
-        # if (pygame.mouse.get_pressed()[0] and options[1].rect.collidepoint(pygame.mouse.get_pos())):
-        #     optionMenu(self.options[0])
-        # if (pygame.mouse.get_pressed()[0] and options[2].rect.collidepoint(pygame.mouse.get_pos())):
-        #     sys.exit(0)
+        for option in self.options:
+            if option.rect.collidepoint(pygame.mouse.get_pos()):
+                option.is_hovered = True
+            else:
+                option.is_hovered = False
+            option.draw(self.gameDisplay, self.menuFont)
+        if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
+            self.gameHandler()
+        if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
+            optionMenu(self.options[0])
+        if (pygame.mouse.get_pressed()[0] and self.options[2].rect.collidepoint(pygame.mouse.get_pos())):
+            sys.exit(0)
 
     def bar(self):
         color = pygame.Color('#f22b2b')
