@@ -2,6 +2,7 @@
 
 import pygame
 import sys
+import random
 from options import Option
 
 BG_COLOR = pygame.Color(30, 30, 50)
@@ -10,6 +11,7 @@ HEAT_BAR_IMAGE = pygame.Surface((1000, 10))
 class Game:
     def __init__(self):
         self.gameState = 1
+        self.keys = [0,0,0,0,0]
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
         self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
@@ -25,6 +27,14 @@ class Game:
 
     def setBackground(self, x, y):
         self.gameDisplay.blit(pygame.image.load("assets/images/background.jpg"), (x, y))
+
+    def getKeys(self):
+        self.keys[0] = random.randint(0, 3)
+        self.keys[1] = random.randint(0, 3)
+        self.keys[2] = random.randint(0, 3)
+        self.keys[3] = random.randint(0, 3)
+        self.keys[4] = random.randint(0, 3)
+        print(self.keys)
 
     def handlerMenu(self):
         self.setBackground(0, 0)
@@ -116,12 +126,11 @@ def handlerEvent(game):
 def vormGame():
     pygame.init()
     game = Game()
-
+    game.getKeys()
     while not game.getExit():
         handlerEvent(game)
         game.handlerMenu()
         pygame.display.update()
-
     pygame.quit()
     quit()
 
