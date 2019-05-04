@@ -4,8 +4,8 @@ import pygame
 import sys
 from options import Option
 
-BG_COLOR = pygame.Color(30, 30, 50)
 HEAT_BAR_IMAGE = pygame.Surface((1000, 10))
+SCORE = 0
 
 class Game:
     def __init__(self):
@@ -25,6 +25,17 @@ class Game:
 
     def setBackground(self, x, y):
         self.gameDisplay.blit(pygame.image.load("assets/images/background.jpg"), (x, y))
+
+    def setGeometrics(self):
+        geomtrics = [
+            pygame.image.load("assets/images/cube.png"),
+            pygame.image.load("assets/images/delta.png"),
+            pygame.image.load("assets/images/losange.png"),
+            pygame.image.load("assets/images/rond.png"),
+            pygame.image.load("assets/images/star.png"),
+            pygame.image.load("assets/images/background_game.jpg")
+        ]
+        return (geomtrics)
 
     def handlerMenu(self):
         self.setBackground(0, 0)
@@ -55,16 +66,26 @@ class Game:
                 color = pygame.Color('#2dc611')
 
     def gameHandler(self):
+        ORANGE = 255, 100, 0
+        GEO = self.setGeometrics()
         clock = pygame.time.Clock()
-        heat_rect = HEAT_BAR_IMAGE.get_rect(topleft=(100, 400))
+        heat_rect = HEAT_BAR_IMAGE.get_rect(topleft=(100, 450))
         heat = 100
         done = False
 
         while not done:
             self.bar()
-            heat -= 0.5
+            heat -= 1 + 0
             heat = max(1, min(heat, 100))
-            self.gameDisplay.fill(BG_COLOR)
+            self.gameDisplay.blit(GEO[5], (0,0))
+            bigText = pygame.font.Font("assets/ka1.ttf", 80)
+            title_text = bigText.render("SCORE: " + str(SCORE), True, ORANGE)
+            self.gameDisplay.blit(title_text, (380, 280))
+            self.gameDisplay.blit(GEO[0], (20, 30))
+            self.gameDisplay.blit(GEO[1], (260, 50))
+            self.gameDisplay.blit(GEO[2], (510, 50))
+            self.gameDisplay.blit(GEO[3], (760, 50))
+            self.gameDisplay.blit(GEO[4], (1010, 50))
             self.gameDisplay.blit(HEAT_BAR_IMAGE, heat_rect, (0, 0, heat_rect.w/100*heat, heat_rect.h))
             if (heat_rect.w/100*heat) == 10:
                 done = True
