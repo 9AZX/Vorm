@@ -82,7 +82,6 @@ class Game:
         self.keys[2] = random.randint(0, 3)
         self.keys[3] = random.randint(0, 3)
         self.keys[4] = random.randint(0, 3)
-        print(self.keys)
 
     def bar(self):
         color = pygame.Color('#f22b2b')
@@ -102,6 +101,7 @@ class Game:
         heat = 100
         done = False
 
+        self.getKeys()
         while not done:
             self.bar()
             heat -= 0.5
@@ -124,7 +124,6 @@ def handlerEvent(game):
 def vormGame():
     pygame.init()
     game = Game()
-    game.getKeys()
     while not game.getExit():
         handlerEvent(game)
         game.handlerMenu()
