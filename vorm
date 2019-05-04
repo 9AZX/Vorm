@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!python
 
 import pygame
 import sys
@@ -142,7 +142,7 @@ class Game:
         WHITE = 255, 255, 255
         GEO = self.setGeometrics()
         GEO2 = self.setGeometrics()
-        LIST = [[0, 0, 0, "A"], [0, 0, 0, "Z"], [0, 0, 0, "E"], [0, 0, 0, "R"], [0, 0, 0, "T"]]
+        LIST = [[0, 0, 0, "A", True], [0, 0, 0, "Z", True], [0, 0, 0, "E", True], [0, 0, 0, "R", True], [0, 0, 0, "T", True]]
         self.position(LIST)
         clock = pygame.time.Clock()
         heat_rect = HEAT_BAR_IMAGE.get_rect(topleft=(100, 450))
@@ -159,33 +159,68 @@ class Game:
                     if event.key == pygame.K_a:
                         if (self.check_key(idx_key, "A", LIST)) == -1:
                             idx_key = 0
+                            LIST[0][4] = True
+                            LIST[1][4] = True
+                            LIST[2][4] = True
+                            LIST[3][4] = True
+                            LIST[4][4] = True
                         else:
+                            LIST[0][4] = False
                             idx_key += 1
                     if event.key == pygame.K_z:
                         if self.check_key(idx_key, "Z", LIST) == -1:
                             idx_key = 0
+                            LIST[0][4] = True
+                            LIST[1][4] = True
+                            LIST[2][4] = True
+                            LIST[3][4] = True
+                            LIST[4][4] = True
                         else:
+                            LIST[1][4] = False
                             idx_key += 1
                     if event.key == pygame.K_e:
                         if self.check_key(idx_key, "E", LIST) == -1:
                             idx_key = 0
+                            LIST[0][4] = True
+                            LIST[1][4] = True
+                            LIST[2][4] = True
+                            LIST[3][4] = True
+                            LIST[4][4] = True
                         else:
+                            LIST[2][4] = False
                             idx_key += 1
                     if event.key == pygame.K_r:
                         if self.check_key(idx_key, "R", LIST) == -1:
                             idx_key = 0
+                            LIST[0][4] = True
+                            LIST[1][4] = True
+                            LIST[2][4] = True
+                            LIST[3][4] = True
+                            LIST[4][4] = True
                         else:
+                            LIST[3][4] = False
                             idx_key += 1;
                     if event.key == pygame.K_t:
                         if self.check_key(idx_key, "T", LIST) == -1:
                             idx_key = 0
+                            LIST[0][4] = True
+                            LIST[1][4] = True
+                            LIST[2][4] = True
+                            LIST[3][4] = True
+                            LIST[4][4] = True
                         else:
+                            LIST[4][4] = False
                             idx_key += 1
             if idx_key == 5:
                 idx_key = 0
                 heat = 100
                 self.score += 1
                 self.position(LIST)
+                LIST[0][4] = True
+                LIST[1][4] = True
+                LIST[2][4] = True
+                LIST[3][4] = True
+                LIST[4][4] = True
             self.bar()
             heat -= 0.2 + self.score/3
             heat = max(1, min(heat, 100))
@@ -193,11 +228,16 @@ class Game:
             bigText = pygame.font.Font("assets/font/ka1.ttf", 80)
             title_text = bigText.render("SCORE: " + str(self.score), True, ORANGE)
             self.gameDisplay.blit(title_text, (380, 280))
-            self.gameDisplay.blit(GEO[0], (LIST[0][0], LIST[0][1]))
-            self.gameDisplay.blit(GEO[1], (LIST[1][0], LIST[1][1]))
-            self.gameDisplay.blit(GEO[2], (LIST[2][0], LIST[2][1]))
-            self.gameDisplay.blit(GEO[3], (LIST[3][0], LIST[3][1]))
-            self.gameDisplay.blit(GEO[4], (LIST[4][0], LIST[4][1]))
+            if LIST[0][4] == True:
+                self.gameDisplay.blit(GEO[0], (LIST[0][0], LIST[0][1]))
+            if LIST[1][4] == True:
+                self.gameDisplay.blit(GEO[1], (LIST[1][0], LIST[1][1]))
+            if LIST[2][4] == True:
+                self.gameDisplay.blit(GEO[2], (LIST[2][0], LIST[2][1]))
+            if LIST[3][4] == True:
+                self.gameDisplay.blit(GEO[3], (LIST[3][0], LIST[3][1]))
+            if LIST[4][4] == True:
+                self.gameDisplay.blit(GEO[4], (LIST[4][0], LIST[4][1]))
             ##########################################
             self.gameDisplay.blit(GEO2[0], (20, 600))
             self.gameDisplay.blit(GEO2[1], (260, 620))
