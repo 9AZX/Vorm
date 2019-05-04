@@ -51,7 +51,7 @@ class Game:
         self.setBackground(0, 0)
         pygame.event.pump()
         self.isHover(self.options)
-        bigText = pygame.font.Font("assets/ka1.ttf", 35)
+        bigText = pygame.font.Font("assets/font/ka1.ttf", 35)
         title_text = bigText.render("PREVIOUS SCORE - " + str(self.score), True, ORANGE)
         self.gameDisplay.blit(title_text, (350, 700))
         if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
@@ -190,13 +190,8 @@ class Game:
             heat -= 0.2 + self.score/3
             heat = max(1, min(heat, 100))
             self.gameDisplay.blit(GEO[5], (0,0))
-<<<<<<< HEAD
-            bigText = pygame.font.Font("assets/ka1.ttf", 80)
-            title_text = bigText.render("SCORE: " + str(self.score), True, ORANGE)
-=======
             bigText = pygame.font.Font("assets/font/ka1.ttf", 80)
-            title_text = bigText.render("SCORE: " + str(SCORE), True, ORANGE)
->>>>>>> 1a84792baf3e5c48e8082f62916d9853cc54aad4
+            title_text = bigText.render("SCORE: " + str(self.score), True, ORANGE)
             self.gameDisplay.blit(title_text, (380, 280))
             self.gameDisplay.blit(GEO[0], (LIST[0][0], LIST[0][1]))
             self.gameDisplay.blit(GEO[1], (LIST[1][0], LIST[1][1]))
@@ -209,7 +204,7 @@ class Game:
             self.gameDisplay.blit(GEO2[2], (510, 620))
             self.gameDisplay.blit(GEO2[3], (760, 620))
             self.gameDisplay.blit(GEO2[4], (1010, 620))
-            bigText = pygame.font.Font("assets/ka1.ttf", 45)
+            bigText = pygame.font.Font("assets/font/ka1.ttf", 45)
             title_text = bigText.render("A", True, WHITE)
             self.gameDisplay.blit(title_text, (100, 670))
             title_text = bigText.render("Z", True, WHITE)
