@@ -6,12 +6,11 @@ import random
 from options import Option
 
 HEAT_BAR_IMAGE = pygame.Surface((1000, 10))
-SCORE = 0
 
 class Game:
     def __init__(self):
         self.gameState = 1
-        self.keys = [0,0,0,0,0]
+        self.score = 0
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
         self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
@@ -48,9 +47,13 @@ class Game:
             option.draw(self.gameDisplay, self.menuFont)
 
     def handlerMenu(self):
+        ORANGE = 255, 100, 0
         self.setBackground(0, 0)
         pygame.event.pump()
         self.isHover(self.options)
+        bigText = pygame.font.Font("assets/ka1.ttf", 35)
+        title_text = bigText.render("PREVIOUS SCORE - " + str(self.score), True, ORANGE)
+        self.gameDisplay.blit(title_text, (350, 700))
         if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
             self.gameHandler()
         if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
@@ -87,13 +90,6 @@ class Game:
                     self.volume = 100
                     pygame.mixer.music.set_volume(self.volume)
 
-    def getKeys(self):
-        self.keys[0] = random.randint(0, 3)
-        self.keys[1] = random.randint(0, 3)
-        self.keys[2] = random.randint(0, 3)
-        self.keys[3] = random.randint(0, 3)
-        self.keys[4] = random.randint(0, 3)
-
     def bar(self):
         color = pygame.Color('#f22b2b')
         for x in range(HEAT_BAR_IMAGE.get_width()):
@@ -106,28 +102,115 @@ class Game:
             if x > 600:
                 color = pygame.Color('#2dc611')
 
+    def position(self, LIST):
+        tmp = None
+        idx = 0
+        pos = [
+            [20, 30, False, 0],
+            [260, 50, False, 1],
+            [510, 50, False, 2],
+            [760, 50, False, 3],
+            [1010, 50, False, 4],
+        ]
+        while idx < 5:
+            tmp = pos[random.randint(0, 4)]
+            if (tmp[2] == True):
+                continue
+            LIST[idx][0] = tmp[0]
+            LIST[idx][1] = tmp[1]
+            LIST[idx][2] = tmp[3]
+            tmp[2] = True
+            idx += 1
+
+    def check_key(self, idx, key, LIST):
+        tmp = 0
+
+        while (tmp < 5):
+            if LIST[tmp][2] == idx:
+                if LIST[tmp][3] != key:
+                    return (-1)
+            tmp += 1
+        return (0)
+
+
     def gameHandler(self):
         ORANGE = 255, 100, 0
+        WHITE = 255, 255, 255
         GEO = self.setGeometrics()
+        GEO2 = self.setGeometrics()
+        LIST = [[0, 0, 0, "A"], [0, 0, 0, "Z"], [0, 0, 0, "E"], [0, 0, 0, "R"], [0, 0, 0, "T"]]
+        self.position(LIST)
         clock = pygame.time.Clock()
         heat_rect = HEAT_BAR_IMAGE.get_rect(topleft=(100, 450))
         heat = 100
         done = False
+        idx_key = 0
 
-        self.getKeys()
+        self.score = 0
         while not done:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        done = True
+                    if event.key == pygame.K_a:
+                        if (self.check_key(idx_key, "A", LIST)) == -1:
+                            idx_key = 0
+                        else:
+                            idx_key += 1
+                    if event.key == pygame.K_z:
+                        if self.check_key(idx_key, "Z", LIST) == -1:
+                            idx_key = 0
+                        else:
+                            idx_key += 1
+                    if event.key == pygame.K_e:
+                        if self.check_key(idx_key, "E", LIST) == -1:
+                            idx_key = 0
+                        else:
+                            idx_key += 1
+                    if event.key == pygame.K_r:
+                        if self.check_key(idx_key, "R", LIST) == -1:
+                            idx_key = 0
+                        else:
+                            idx_key += 1;
+                    if event.key == pygame.K_t:
+                        if self.check_key(idx_key, "T", LIST) == -1:
+                            idx_key = 0
+                        else:
+                            idx_key += 1
+            if idx_key == 5:
+                idx_key = 0
+                heat = 100
+                self.score += 1
+                self.position(LIST)
             self.bar()
-            heat -= 1 + 0
+            heat -= 0.2 + self.score/3
             heat = max(1, min(heat, 100))
             self.gameDisplay.blit(GEO[5], (0,0))
             bigText = pygame.font.Font("assets/ka1.ttf", 80)
-            title_text = bigText.render("SCORE: " + str(SCORE), True, ORANGE)
+            title_text = bigText.render("SCORE: " + str(self.score), True, ORANGE)
             self.gameDisplay.blit(title_text, (380, 280))
-            self.gameDisplay.blit(GEO[0], (20, 30))
-            self.gameDisplay.blit(GEO[1], (260, 50))
-            self.gameDisplay.blit(GEO[2], (510, 50))
-            self.gameDisplay.blit(GEO[3], (760, 50))
-            self.gameDisplay.blit(GEO[4], (1010, 50))
+            self.gameDisplay.blit(GEO[0], (LIST[0][0], LIST[0][1]))
+            self.gameDisplay.blit(GEO[1], (LIST[1][0], LIST[1][1]))
+            self.gameDisplay.blit(GEO[2], (LIST[2][0], LIST[2][1]))
+            self.gameDisplay.blit(GEO[3], (LIST[3][0], LIST[3][1]))
+            self.gameDisplay.blit(GEO[4], (LIST[4][0], LIST[4][1]))
+            ##########################################
+            self.gameDisplay.blit(GEO2[0], (20, 600))
+            self.gameDisplay.blit(GEO2[1], (260, 620))
+            self.gameDisplay.blit(GEO2[2], (510, 620))
+            self.gameDisplay.blit(GEO2[3], (760, 620))
+            self.gameDisplay.blit(GEO2[4], (1010, 620))
+            bigText = pygame.font.Font("assets/ka1.ttf", 45)
+            title_text = bigText.render("A", True, WHITE)
+            self.gameDisplay.blit(title_text, (100, 670))
+            title_text = bigText.render("Z", True, WHITE)
+            self.gameDisplay.blit(title_text, (340, 692))
+            title_text = bigText.render("E", True, WHITE)
+            self.gameDisplay.blit(title_text, (600, 670))
+            title_text = bigText.render("R", True, WHITE)
+            self.gameDisplay.blit(title_text, (840, 680))
+            title_text = bigText.render("T", True, WHITE)
+            self.gameDisplay.blit(title_text, (1095, 687))
             self.gameDisplay.blit(HEAT_BAR_IMAGE, heat_rect, (0, 0, heat_rect.w/100*heat, heat_rect.h))
             if (heat_rect.w/100*heat) == 10:
                 done = True
