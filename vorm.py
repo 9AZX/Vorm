@@ -8,10 +8,10 @@ class Game:
         self.gameState = 1
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
-        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
-        self.options = [Option("PLAY", (520, 500), self.menuFont, self.gameDisplay),
-                        Option("OPTIONS", (520, 555), self.menuFont, self.gameDisplay),
-                        Option("EXIT", (520, 605), self.menuFont, self.gameDisplay)]
+        self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
+        self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
+                        Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
+                        Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
 
     def getExit(self):
         return self._exit
