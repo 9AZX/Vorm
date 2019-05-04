@@ -2,7 +2,7 @@
 
 import pygame
 import sys
-
+from options import Option
 class Game:
     def __init__(self):
         self.gameState = 1
@@ -34,54 +34,60 @@ class Game:
         if (pygame.mouse.get_pressed()[0] and options[0].rect.collidepoint(pygame.mouse.get_pos())):
             game_ft()
         if (pygame.mouse.get_pressed()[0] and options[1].rect.collidepoint(pygame.mouse.get_pos())):
-            options_ft()
+            optionMenu(self.options[0])
         if (pygame.mouse.get_pressed()[0] and options[2].rect.collidepoint(pygame.mouse.get_pos())):
             sys.exit(0)
 
-    def game_ft():
+    def gameHandler():
         print("Game\n")
 
-    def options_ft():
-        print("options")
+    def optionHandler():
+        exit = False
+        clock = pygame.time.Clock()
 
-class Option:
-    is_hovered = False
-    def __init__(self, text, pos, menuFont, gameDisplay):
-        self.text = text
-        self.pos = pos
-        self.set_rect(menuFont)
-        self.draw(gameDisplay, menuFont)
+        # while not exit:                                                     #
+        #     for event in game.event.get():                                  #
+        #         if event.type == game.QUIT:                                 #
+        #             game.quit()                                             #
+        #             quit()                                                  #
+        #         if event.type == game.KEYDOWN:                              # boucle de detection des inputs
+        #             if event.key == game.K_ESCAPE:                          #
+        #                 exit = True                                         #
+        #             if event.key == game.K_r:                               #
+        #                 exit = True                                         #
+        #                 restart = True                                      #
 
-    def draw(self, gameDisplay, menuFont):
-        self.set_rend(menuFont)
-        gameDisplay.blit(self.rend, (self.pos))
+        #     game_interaction(map, player)
+        #     if player.win(map):
+        #         exit = True
+        #         win = True
+        #     place_map(game_display, map, images)
+        #     place_sprite(game_display, player)
+        #     game.display.update()
+        #     clock.tick(10)
+        # if win:
+        #     win_loop(game_display, map, images, player)
+        # if restart:
+        #     return 1
+        # return 0
 
-    def set_rend(self, menuFont):
-        self.rend = menuFont.render(self.text, True, self.get_color())
+def optionMenu(option):
+    pass
 
-    def get_color(self):
-        if self.is_hovered:
-            return (100, 100, 100)
-        else:
-            return (0, 0, 0)
-
-    def set_rect(self, menuFont):
-        self.set_rend(menuFont)
-        self.rect = self.rend.get_rect()
-        self.rect.topleft = self.pos
+def handlerEvent(game):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit(0)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game.setExit(True)
 
 def vormGame():
     pygame.init()
     game = Game()
 
     while not game.getExit():
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    game.setExit(True)
-
+        handlerEvent(game)
         game.handlerMenu()
         pygame.display.update()
 
