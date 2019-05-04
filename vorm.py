@@ -13,7 +13,7 @@ class Game:
         self.score = 0
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
-        self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
+        self.menuFont = pygame.font.Font("assets/font/wayner.ttf", 40)
         self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
                         Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
                         Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
@@ -55,7 +55,11 @@ class Game:
         title_text = bigText.render("PREVIOUS SCORE - " + str(self.score), True, ORANGE)
         self.gameDisplay.blit(title_text, (350, 700))
         if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
+            pygame.mixer.music.load("assets/music/on-the-run.ogg")
+            pygame.mixer.music.play()
             self.gameHandler()
+            pygame.mixer.music.load("assets/music/intro.ogg")
+            pygame.mixer.music.play()
         if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
             self.gameDisplay.fill((0,0,0))
             self.optionHandler()
@@ -63,7 +67,7 @@ class Game:
             sys.exit(0)
 
     def optionHandler(self):
-        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
+        self.menuFont = pygame.font.Font("assets/font/ka1.ttf", 40)
         optionMenuFont = pygame.font.init()
         option = Option("VOLUME : " + str(self.volume), (440, 525), self.menuFont, self.gameDisplay)
         while True:
@@ -186,8 +190,13 @@ class Game:
             heat -= 0.2 + self.score/3
             heat = max(1, min(heat, 100))
             self.gameDisplay.blit(GEO[5], (0,0))
+<<<<<<< HEAD
             bigText = pygame.font.Font("assets/ka1.ttf", 80)
             title_text = bigText.render("SCORE: " + str(self.score), True, ORANGE)
+=======
+            bigText = pygame.font.Font("assets/font/ka1.ttf", 80)
+            title_text = bigText.render("SCORE: " + str(SCORE), True, ORANGE)
+>>>>>>> 1a84792baf3e5c48e8082f62916d9853cc54aad4
             self.gameDisplay.blit(title_text, (380, 280))
             self.gameDisplay.blit(GEO[0], (LIST[0][0], LIST[0][1]))
             self.gameDisplay.blit(GEO[1], (LIST[1][0], LIST[1][1]))
@@ -227,6 +236,8 @@ def handlerEvent(game):
 
 def vormGame():
     pygame.init()
+    pygame.display.set_caption('Vorm')
+    pygame.display.set_icon(pygame.image.load('./assets/icon.png'))
     game = Game()
     while not game.getExit():
         handlerEvent(game)
