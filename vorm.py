@@ -1,24 +1,63 @@
 #!python
 
-import pygame as game
+import pygame
 import sys
 
-# from sokoban_game import game_loop
+class Game:
+    def __init__(self):
+        self.gameState = 1
+        self._exit = False
+        self.gameDisplay = pygame.display.set_mode((1200, 859))
+        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
+        self.options = [Option("PLAY", (520, 500), self.menuFont, self.gameDisplay),
+                        Option("OPTIONS", (520, 555), self.menuFont, self.gameDisplay),
+                        Option("EXIT", (520, 605), self.menuFont, self.gameDisplay)]
+
+    def getExit(self):
+        return self._exit
+
+    def setExit(self, status):
+        self._exit = status
+
+    def setBackground(self, x, y):
+        self.gameDisplay.blit(pygame.image.load("assets/images/background.jpg"), (x, y))
+
+    def handlerMenu(self):
+        self.setBackground(0, 0)
+        pygame.event.pump()
+        for option in self.options:
+            if option.rect.collidepoint(pygame.mouse.get_pos()):
+                option.is_hovered = True
+            else:
+                option.is_hovered = False
+            option.draw(self.gameDisplay, self.menuFont)
+        if (pygame.mouse.get_pressed()[0] and options[0].rect.collidepoint(pygame.mouse.get_pos())):
+            game_ft()
+        if (pygame.mouse.get_pressed()[0] and options[1].rect.collidepoint(pygame.mouse.get_pos())):
+            options_ft()
+        if (pygame.mouse.get_pressed()[0] and options[2].rect.collidepoint(pygame.mouse.get_pos())):
+            sys.exit(0)
+
+    def game_ft():
+        print("Game\n")
+
+    def options_ft():
+        print("options")
 
 class Option:
     is_hovered = False
-    def __init__(self, text, pos):
+    def __init__(self, text, pos, menuFont, gameDisplay):
         self.text = text
         self.pos = pos
-        self.set_rect()
-        self.draw()
+        self.set_rect(menuFont)
+        self.draw(gameDisplay, menuFont)
 
-    def draw(self):
-        self.set_rend()
-        game_display.blit(self.rend, self.rect)
+    def draw(self, gameDisplay, menuFont):
+        self.set_rend(menuFont)
+        gameDisplay.blit(self.rend, (self.pos))
 
-    def set_rend(self):
-        self.rend = menu_font.render(self.text, True, self.get_color())
+    def set_rend(self, menuFont):
+        self.rend = menuFont.render(self.text, True, self.get_color())
 
     def get_color(self):
         if self.is_hovered:
@@ -26,71 +65,27 @@ class Option:
         else:
             return (0, 0, 0)
 
-    def set_rect(self):
-        self.set_rend()
+    def set_rect(self, menuFont):
+        self.set_rend(menuFont)
         self.rect = self.rend.get_rect()
         self.rect.topleft = self.pos
 
+def vormGame():
+    pygame.init()
+    game = Game()
 
-def background(x, y):
-    game_display.blit(game.image.load("assets/images/background.jpg"), (x, y))
+    while not game.getExit():
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    game.setExit(True)
 
-def logo(x, y):
-    game_display.blit(game.image.load("assets/images/top_logo.png"), (x, y))
+        game.handlerMenu()
+        pygame.display.update()
 
-def game_ft():
-    bool_game = 1
-    while bool_game == 1:
-        print("Game\n")
-        # bool_game = game_loop(game_display)
-
-def options_ft():
-    print("options")
-
-def menu_ft(exit):
-    background(0, 0)
-    logo(630, 60)
-    game.event.pump()
-    for option in options:
-        if option.rect.collidepoint(game.mouse.get_pos()):
-            option.is_hovered = True
-        else:
-            option.is_hovered = False
-        option.draw()
-    if (game.mouse.get_pressed()[0] and options[0].rect.collidepoint(
-            game.mouse.get_pos())):
-        game_ft()
-    if (game.mouse.get_pressed()[0] and options[1].rect.collidepoint(
-            game.mouse.get_pos())):
-        options_ft()
-    if (game.mouse.get_pressed()[0] and options[2].rect.collidepoint(
-            game.mouse.get_pos())):
-        sys.exit(0)
-
-if __name__ == '__main__':
-
-    exit = False
-    game_state = 1
-
-    game.init()
-    game_display = game.display.set_mode((1920, 1080))
-    menu_font = game.font.Font("assets/ka1.ttf", 40)
-    options = [Option("PLAY", (950, 250 + 20)),
-                Option("OPTIONS", (950, 295 + 20)),
-                Option("EXIT", (950, 340 + 20))]
-
-    while not exit:
-        for event in game.event.get():
-            if event.type == game.QUIT:
-                exit = True
-            if event.type == game.KEYDOWN:
-                if event.key == game.K_ESCAPE:
-                    exit = True
-                if event.key == game.K_p:
-                    game_ft()
-
-        menu_ft(exit)
-        game.display.update()
-
-    game.quit()
+    pygame.quit()
     quit()
+
+vormGame()
