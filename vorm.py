@@ -2,6 +2,7 @@
 
 import pygame
 import sys
+import random
 from options import Option
 
 HEAT_BAR_IMAGE = pygame.Surface((1000, 10))
@@ -10,12 +11,16 @@ SCORE = 0
 class Game:
     def __init__(self):
         self.gameState = 1
+        self.keys = [0,0,0,0,0]
         self._exit = False
         self.gameDisplay = pygame.display.set_mode((1200, 859))
         self.menuFont = pygame.font.Font("assets/wayner.ttf", 40)
         self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
                         Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
                         Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
+        self.volume = 100
+        pygame.mixer.music.load("assets/music/intro.ogg")
+        pygame.mixer.music.play()
 
     def getExit(self):
         return self._exit
@@ -37,21 +42,57 @@ class Game:
         ]
         return (geomtrics)
 
+    def isHover(self, listOptions):
+        for option in listOptions:
+            option.is_hovered = True if option.rect.collidepoint(pygame.mouse.get_pos()) else False
+            option.draw(self.gameDisplay, self.menuFont)
+
     def handlerMenu(self):
         self.setBackground(0, 0)
         pygame.event.pump()
-        for option in self.options:
-            if option.rect.collidepoint(pygame.mouse.get_pos()):
-                option.is_hovered = True
-            else:
-                option.is_hovered = False
-            option.draw(self.gameDisplay, self.menuFont)
+        self.isHover(self.options)
         if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
             self.gameHandler()
         if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
-            optionMenu(self.options[0])
+            self.gameDisplay.fill((0,0,0))
+            self.optionHandler()
         if (pygame.mouse.get_pressed()[0] and self.options[2].rect.collidepoint(pygame.mouse.get_pos())):
             sys.exit(0)
+
+    def optionHandler(self):
+        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
+        optionMenuFont = pygame.font.init()
+        option = Option("VOLUME : " + str(self.volume), (440, 525), self.menuFont, self.gameDisplay)
+        while True:
+            self.gameDisplay.fill((0,0,0))
+            self.setBackground(0,0)
+            if self.optionEventHandler() == 1:
+                return 1
+            pygame.event.pump()
+            title_text = self.menuFont.render("VOLUME : " + str(self.volume), True, (0, 0, 0))
+            self.gameDisplay.blit(title_text, (440, 525))
+            pygame.display.update()
+
+    def optionEventHandler(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 1
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return 1
+                if event.key == pygame.K_m and self.volume == 100:
+                    self.volume = 0
+                    pygame.mixer.music.set_volume(self.volume)
+                else:
+                    self.volume = 100
+                    pygame.mixer.music.set_volume(self.volume)
+
+    def getKeys(self):
+        self.keys[0] = random.randint(0, 3)
+        self.keys[1] = random.randint(0, 3)
+        self.keys[2] = random.randint(0, 3)
+        self.keys[3] = random.randint(0, 3)
+        self.keys[4] = random.randint(0, 3)
 
     def bar(self):
         color = pygame.Color('#f22b2b')
@@ -73,6 +114,7 @@ class Game:
         heat = 100
         done = False
 
+        self.getKeys()
         while not done:
             self.bar()
             heat -= 1 + 0
@@ -92,40 +134,6 @@ class Game:
             pygame.display.flip()
             clock.tick(30)
 
-
-    def optionHandler():
-        exit = False
-        clock = pygame.time.Clock()
-
-        # while not exit:                                                     #
-        #     for event in game.event.get():                                  #
-        #         if event.type == game.QUIT:                                 #
-        #             game.quit()                                             #
-        #             quit()                                                  #
-        #         if event.type == game.KEYDOWN:                              # boucle de detection des inputs
-        #             if event.key == game.K_ESCAPE:                          #
-        #                 exit = True                                         #
-        #             if event.key == game.K_r:                               #
-        #                 exit = True                                         #
-        #                 restart = True                                      #
-
-        #     game_interaction(map, player)
-        #     if player.win(map):
-        #         exit = True
-        #         win = True
-        #     place_map(game_display, map, images)
-        #     place_sprite(game_display, player)
-        #     game.display.update()
-        #     clock.tick(10)
-        # if win:
-        #     win_loop(game_display, map, images, player)
-        # if restart:
-        #     return 1
-        # return 0
-
-def optionMenu(option):
-    pass
-
 def handlerEvent(game):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -137,12 +145,10 @@ def handlerEvent(game):
 def vormGame():
     pygame.init()
     game = Game()
-
     while not game.getExit():
         handlerEvent(game)
         game.handlerMenu()
         pygame.display.update()
-
     pygame.quit()
     quit()
 
