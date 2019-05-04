@@ -1,7 +1,3 @@
-class MenuOption:
-    def __init__(self):
-        pass
-
 class Option:
     is_hovered = False
     def __init__(self, text, pos, menuFont, gameDisplay):
@@ -14,11 +10,8 @@ class Option:
         self.text = newText
 
     def draw(self, gameDisplay, menuFont):
-        self.set_rend(menuFont)
-        gameDisplay.blit(self.rend, (self.pos))
-
-    def set_rend(self, menuFont):
         self.rend = menuFont.render(self.text, True, self.get_color())
+        gameDisplay.blit(self.rend, (self.pos))
 
     def get_color(self):
         if self.is_hovered:
@@ -27,6 +20,6 @@ class Option:
             return (0, 0, 0)
 
     def set_rect(self, menuFont):
-        self.set_rend(menuFont)
+        self.rend = menuFont.render(self.text, True, self.get_color())
         self.rect = self.rend.get_rect()
         self.rect.topleft = self.pos

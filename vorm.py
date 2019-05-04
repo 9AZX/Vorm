@@ -18,6 +18,8 @@ class Game:
         self.options = [Option("PLAY", (540, 510), self.menuFont, self.gameDisplay),
                         Option("OPTIONS", (505, 575), self.menuFont, self.gameDisplay),
                         Option("EXIT", (548, 635), self.menuFont, self.gameDisplay)]
+        self.volume = 50
+        # self.music = pygame.mixer.music.load("")
 
     def getExit(self):
         return self._exit
@@ -28,6 +30,51 @@ class Game:
     def setBackground(self, x, y):
         self.gameDisplay.blit(pygame.image.load("assets/images/background.jpg"), (x, y))
 
+    def isHover(self, listOptions):
+        for option in listOptions:
+            option.is_hovered = True if option.rect.collidepoint(pygame.mouse.get_pos()) else False
+            option.draw(self.gameDisplay, self.menuFont)
+
+    def handlerMenu(self):
+        self.setBackground(0, 0)
+        pygame.event.pump()
+        self.isHover(self.options)
+        if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
+            self.gameHandler()
+        if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
+            self.gameDisplay.fill((0,0,0))
+            self.optionHandler()
+        if (pygame.mouse.get_pressed()[0] and self.options[2].rect.collidepoint(pygame.mouse.get_pos())):
+            sys.exit(0)
+
+    def optionHandler(self):
+        self.menuFont = pygame.font.Font("assets/ka1.ttf", 40)
+        optionMenuFont = pygame.font.init()
+        option = Option("VOLUME : " + str(self.volume), (440, 525), self.menuFont, self.gameDisplay)
+        while True:
+            self.gameDisplay.fill((0,0,0))
+            self.setBackground(0,0)
+            if self.optionEventHandler() == 1:
+                return 1
+            pygame.event.pump()
+            title_text = self.menuFont.render("VOLUME : " + str(self.volume), True, (0, 0, 0))
+            self.gameDisplay.blit(title_text, (440, 525))
+            pygame.display.update()
+
+    def optionEventHandler(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 1
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return 1
+                if event.key == pygame.K_UP:
+                    self.volume += 5
+                    # self.music.set_volume(self.volume)
+                elif event.key == pygame.K_DOWN:
+                    self.volume -= 5
+                    # self.music.set_volume(self.volume)
+
     def getKeys(self):
         self.keys[0] = random.randint(0, 3)
         self.keys[1] = random.randint(0, 3)
@@ -35,22 +82,6 @@ class Game:
         self.keys[3] = random.randint(0, 3)
         self.keys[4] = random.randint(0, 3)
         print(self.keys)
-
-    def handlerMenu(self):
-        self.setBackground(0, 0)
-        pygame.event.pump()
-        for option in self.options:
-            if option.rect.collidepoint(pygame.mouse.get_pos()):
-                option.is_hovered = True
-            else:
-                option.is_hovered = False
-            option.draw(self.gameDisplay, self.menuFont)
-        if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
-            self.gameHandler()
-        if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
-            optionMenu(self.options[0])
-        if (pygame.mouse.get_pressed()[0] and self.options[2].rect.collidepoint(pygame.mouse.get_pos())):
-            sys.exit(0)
 
     def bar(self):
         color = pygame.Color('#f22b2b')
@@ -80,40 +111,6 @@ class Game:
                 done = True
             pygame.display.flip()
             clock.tick(30)
-
-
-    def optionHandler():
-        exit = False
-        clock = pygame.time.Clock()
-
-        # while not exit:                                                     #
-        #     for event in game.event.get():                                  #
-        #         if event.type == game.QUIT:                                 #
-        #             game.quit()                                             #
-        #             quit()                                                  #
-        #         if event.type == game.KEYDOWN:                              # boucle de detection des inputs
-        #             if event.key == game.K_ESCAPE:                          #
-        #                 exit = True                                         #
-        #             if event.key == game.K_r:                               #
-        #                 exit = True                                         #
-        #                 restart = True                                      #
-
-        #     game_interaction(map, player)
-        #     if player.win(map):
-        #         exit = True
-        #         win = True
-        #     place_map(game_display, map, images)
-        #     place_sprite(game_display, player)
-        #     game.display.update()
-        #     clock.tick(10)
-        # if win:
-        #     win_loop(game_display, map, images, player)
-        # if restart:
-        #     return 1
-        # return 0
-
-def optionMenu(option):
-    pass
 
 def handlerEvent(game):
     for event in pygame.event.get():
