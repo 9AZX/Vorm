@@ -41,7 +41,11 @@ class Game:
         pygame.event.pump()
         self.isHover(self.options)
         if (pygame.mouse.get_pressed()[0] and self.options[0].rect.collidepoint(pygame.mouse.get_pos())):
+            pygame.mixer.music.load("assets/music/on-the-run.ogg")
+            pygame.mixer.music.play()
             self.gameHandler()
+            pygame.mixer.music.load("assets/music/intro.ogg")
+            pygame.mixer.music.play()
         if (pygame.mouse.get_pressed()[0] and self.options[1].rect.collidepoint(pygame.mouse.get_pos())):
             self.gameDisplay.fill((0,0,0))
             self.optionHandler()
